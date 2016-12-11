@@ -1,5 +1,15 @@
 import * as h from './h';
 
-let url = "/activitytypes";
+let filterFindResult = (result) => {
+    let records = result.records;
+    for (var i = 0; i < records.length; i++) {
+        records[i].activity_type_id = records[i].Id;
+        records[i].name = records[i].Name;
+    }
+    return records;
+}
 
-export let findAll = sort => h.get(url, {sort});
+export let findAll = sort => {
+    let q = "SELECT Id, Name FROM PropertyActivityType__c ";
+    return h.get("/query", {q}, filterFindResult);
+}

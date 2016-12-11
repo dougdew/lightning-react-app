@@ -3,7 +3,7 @@ import React from 'react';
 export let ButtonIcon = React.createClass({
 
     render() {
-        let useTag = '<use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#' + this.props.name + '" />';
+        let useTag = '<use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#' + this.props.name + '" />';
         let className  = "slds-button__icon";
         if (this.props.stateful) {
             className += "--stateful";
@@ -31,7 +31,7 @@ export let Icon = React.createClass({
     },
 
     render() {
-        let useTag = '<use xlink:href="/assets/icons/' + this.props.category + '-sprite/svg/symbols.svg#' + this.props.name + '" />';
+        let useTag = '<use xlink:href="assets/icons/' + this.props.category + '-sprite/svg/symbols.svg#' + this.props.name + '" />';
         let className  = "slds-icon";
         let theme = this.props.theme === undefined ? this.props.name : this.props.theme;
         if (this.props.stateful) {
@@ -54,7 +54,7 @@ export let Icon = React.createClass({
 export let InputIcon = React.createClass({
 
     render() {
-        let useTag = '<use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#' + this.props.name + '" />';
+        let useTag = '<use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#' + this.props.name + '" />';
         let className  = "slds-input__icon slds-icon-text-default";
         return <svg  aria-hidden="true" className={className} dangerouslySetInnerHTML={{__html: useTag }} />;
     }

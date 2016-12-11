@@ -3,7 +3,6 @@ import React from 'react';
 import * as activityService from '../services/ActivityService';
 
 import Tabs from '../components/Tabs';
-import GoogleMaps from '../components/GoogleMaps';
 import FileDropArea from '../components/FileDropArea';
 
 import ActivityTimeline from './../activities/ActivityTimeline';
@@ -130,11 +129,6 @@ export default React.createClass({
                                     <p className="slds-text-body--regular slds-truncate" title="">Gas</p>
                                 </dd>
                             </dl>
-                        </div>
-
-                        <div className="slds-col--padded slds-size--1-of-1">
-                            <br/>
-                            <GoogleMaps data={this.props.property} height="250px"/>
                         </div>
 
                     </div>

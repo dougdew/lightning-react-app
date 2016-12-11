@@ -2,7 +2,6 @@ import React from 'react';
 
 import * as propertyService from '../services/PropertyService';
 
-import GoogleMaps from '../components/GoogleMaps';
 import {HomeHeader} from '../components/PageHeader';
 
 import PropertyList from './PropertyList';
@@ -55,14 +54,14 @@ export default React.createClass({
     render() {
         let view;
         if (this.state.view === "map") {
-            view = <GoogleMaps data={this.state.properties}/>;
+            view = <div>Google Map removed due to CSP</div>;
         } else if (this.state.view === "split") {
             view = <div className="slds-grid slds-wrap">
                 <div className="slds-col slds-size--1-of-1 slds-large-size--2-of-3">
                     <PropertyList properties={this.state.properties} onSortChange={this.sortChangeHandler} onDelete={this.deleteHandler} onEdit={this.editHandler}/>
                 </div>
                 <div className="slds-col--padded slds-size--1-of-1 slds-large-size--1-of-3">
-                    <GoogleMaps data={this.state.properties}/>
+                    Google Map removed due to CSP
                 </div>
             </div>;
         } else {
