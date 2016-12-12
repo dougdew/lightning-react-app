@@ -56,7 +56,7 @@ export let findAll = sort => {
 export let findByProperty = propertyId => {
     let q = "SELECT Id, FirstName__c, LastName__c, Name, Title__c, OfficePhone__c, MobilePhone__c, Email__c FROM Broker__c " +
             "WHERE Id IN " +
-            "(SELECT Broker__r.Id FROM PropertyBroker__c WHERE Property__r.Id = '" + propertyId + "') " +
+            "(SELECT Broker__c FROM PropertyBroker__c WHERE Property__c = '" + propertyId + "') " +
             "ORDER BY LastName__c";
     return h.get("/query", {q}, getFirstRecord);
 }

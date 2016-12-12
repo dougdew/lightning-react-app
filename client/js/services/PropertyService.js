@@ -70,7 +70,7 @@ export let findByName = name => {
 export let findByBroker = brokerId => {
     let q = "SELECT Id, Address__c, City__c, State__c, Zip__c, Bedrooms__c, Bathrooms__c, Price__c, Location__c, Pic__c, Teaser__c, Description__c, Size__c FROM Property__c " +
             "WHERE Id IN " +
-            "(SELECT Property__r.Id FROM PropertyBroker__c WHERE Broker__r.Id = '" + brokerId + "') "
+            "(SELECT Property__c FROM PropertyBroker__c WHERE Broker__c = '" + brokerId + "') "
             "ORDER BY Address__c";
     return h.get("/query", {q}, getFirstRecord);
 };
