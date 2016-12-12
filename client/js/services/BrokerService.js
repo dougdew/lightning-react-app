@@ -58,7 +58,7 @@ export let findByProperty = propertyId => {
             "WHERE Id IN " +
             "(SELECT Broker__c FROM PropertyBroker__c WHERE Property__c = '" + propertyId + "') " +
             "ORDER BY LastName__c";
-    return h.get("/query", {q}, getFirstRecord);
+    return h.get("/query", {q}, filterFindResult);
 }
 
 export let findByName = name => {

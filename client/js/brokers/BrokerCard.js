@@ -12,7 +12,7 @@ export default React.createClass({
     },
 
     componentWillReceiveProps(props) {
-        brokerService.findByProperty(props.property_id).then(brokers => this.setState({brokers}));
+        brokerService.findByProperty(props.propertyId).then(brokers => this.setState({brokers}));
     },
 
     linkHandler(broker) {
