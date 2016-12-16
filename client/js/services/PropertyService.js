@@ -1,6 +1,6 @@
 import * as h from './h';
 
-let filterFindResult = (result) => {
+export let filterFoundProperties = (result) => {
     let records = result.records;
     for (var i = 0; i < records.length; i++) {
         records[i].property_id = records[i].Id;
@@ -11,7 +11,7 @@ let filterFindResult = (result) => {
         records[i].bedrooms = records[i].Bedrooms__c;
         records[i].bathrooms = records[i].Bathrooms__c;
         records[i].price = records[i].Price__c;
-        records[i].location = records[i].Location__c;
+        //records[i].location = records[i].Location__c;
         records[i].pic = records[i].Pic__c;
         records[i].teaser = records[i].Teaser__c;
         records[i].description = records[i].Description__c;
@@ -20,8 +20,8 @@ let filterFindResult = (result) => {
     return records;
 }
 
-let getFirstRecord = (result) => {
-    let filteredResult = filterFindResult(result);
+export let filterFoundProperty = (result) => {
+    let filteredResult = filterFoundProperties(result);
     if (filteredResult.length == 1) {
         return filteredResult[0];
     }
@@ -30,8 +30,9 @@ let getFirstRecord = (result) => {
     }
 };
 
-let filterCreateOrUpdateInput = (property) => {
+export let filterProperty = (property) => {
     let filteredProperty = {};
+    filteredProperty.Id = property.property_id;
     filteredProperty.Address__c = property.address;
     filteredProperty.City__c = property.city;
     filteredProperty.State__c = property.state;
@@ -40,7 +41,7 @@ let filterCreateOrUpdateInput = (property) => {
     filteredProperty.Bedrooms__c = property.bedrooms;
     filteredProperty.Bathrooms__c = property.bathrooms;
     filteredProperty.Price__c = property.price;
-    filteredProperty.Location__c = property.location;
+    //filteredProperty.Location__c = property.location;
     filteredProperty.Pic__c = property.pic;
     filteredProperty.Teaser__c = property.teaser;
     filteredProperty.Description__c = property.description;
@@ -59,12 +60,12 @@ export let findAll = sort => {
     if (sort) {
         q = q + " ORDER BY " + sort
     }
-    return h.get("/query", {q}, filterFindResult);
+    return h.query(q);
 };
 
 export let findByName = name => {
     let q = "SELECT Id, Address__c, City__c, State__c, Zip__c, Bedrooms__c, Bathrooms__c, Price__c, Location__c, Pic__c, Teaser__c, Description__c, Size__c FROM Property__c WHERE Name = '" + name + "'";
-    return h.get("/query", {q}, getFirstRecord);
+    return h.query(q);
 };
 
 export let findByBroker = brokerId => {
@@ -72,27 +73,23 @@ export let findByBroker = brokerId => {
             "WHERE Id IN " +
             "(SELECT Property__c FROM PropertyBroker__c WHERE Broker__c = '" + brokerId + "') "
             "ORDER BY Address__c";
-    return h.get("/query", {q}, getFirstRecord);
+    return h.query(q);
 };
 
 export let findById = id => {
     let q = "SELECT Id, Address__c, City__c, State__c, Zip__c, Bedrooms__c, Bathrooms__c, Price__c, Location__c, Pic__c, Teaser__c, Description__c, Size__c FROM Property__c WHERE Id = '" + id + "'";
-    return h.get("/query", {q}, getFirstRecord);
+    return h.query(q);
 };
 
 export let updateItem = property => {
-    if (!property.property_id) {
-        return;
-    }
-    let filteredProperty = filterCreateOrUpdateInput(property);
-    return h.patch("/sobjects/Property__c/" + property.property_id, filteredProperty);
+    return h.update("Property__c", property);
 }
 
 export let createItem = property => {
-    let filteredProperty = filterCreateOrUpdateInput(property);
-    return h.post("/sobjects/Property__c/", filteredProperty);
+    delete property.Id;
+    return h.create("Property__c", property);
 }
 
 export let deleteItem = id => {
-    return h.del("/sobjects/Property__c/" + id);
+    return h.del("Property__c", id);
 }

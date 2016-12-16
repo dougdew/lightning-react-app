@@ -13,11 +13,15 @@ export default React.createClass({
 
     componentDidMount() {
         let contactId = this.props.params.contactId;
-        contactService.findById(contactId).then(contact => this.setState({contact}));
+        contactService.findById(contactId).then(contact => {
+            let filteredContact = contactService.filterFoundContact(contact);
+            this.setState({contact:filteredContact});
+        });
     },
 
     saveHandler(contact) {
-        contactService.updateItem(contact);
+        let filteredContact = contactService.filterContact(contact);
+        contactService.updateItem(filteredContact);
     },
 
     editHandler() {

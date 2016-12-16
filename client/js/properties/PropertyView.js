@@ -21,7 +21,10 @@ export default React.createClass({
     },
 
     loadActivities(propertyId) {
-        activityService.findByProperty(propertyId).then(activities => this.setState({activities}));
+        activityService.findByProperty(propertyId).then(activities => {
+            let filteredActivities = activityService.filterFoundActivities(activities);
+            this.setState({activities:filteredActivities});
+        });
     },
 
     newActivityHandler() {
@@ -37,7 +40,8 @@ export default React.createClass({
     },
 
     saveActivityHandler(activity) {
-        activityService.createItem(activity).then(() => {
+        let filteredActivity = activityService.filterActivity(activity);
+        activityService.createItem(filteredActivity).then(() => {
             this.loadActivities(this.props.property.property_id);
             this.setState({addingActivity: false});
         });

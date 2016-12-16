@@ -12,11 +12,15 @@ export default React.createClass({
     },
 
     componentDidMount() {
-        propertyService.findById(this.props.params.propertyId).then(property => this.setState({property}));
+        propertyService.findById(this.props.params.propertyId).then(property => {
+            let filteredProperty = propertyService.filterFoundProperty(property);
+            this.setState({property:filteredProperty});
+        });
     },
 
     saveHandler(property) {
-        propertyService.updateItem(property).then(() => {
+        let filteredProperty = propertyService.filterProperty(property);
+        propertyService.updateItem(filteredProperty).then(() => {
             console.log('property saved');
         });
     },

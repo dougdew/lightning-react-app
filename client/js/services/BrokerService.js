@@ -1,8 +1,6 @@
 import * as h from './h';
 
-let url = "/brokers";
-
-let filterFindResult = (result) => {
+export let filterFoundBrokers = (result) => {
     let records = result.records;
     for (var i = 0; i < records.length; i++) {
         records[i].broker_id = records[i].Id;
@@ -17,8 +15,8 @@ let filterFindResult = (result) => {
     return records;
 }
 
-let getFirstRecord = (result) => {
-    let filteredResult = filterFindResult(result);
+export let filterFoundBroker = (result) => {
+    let filteredResult = filterFoundBrokers(result);
     if (filteredResult.length == 1) {
         return filteredResult[0];
     }
@@ -27,8 +25,9 @@ let getFirstRecord = (result) => {
     }
 };
 
-let filterCreateOrUpdateInput = (broker) => {
+export let filterBroker = (broker) => {
     let filteredBroker = {};
+    filteredBroker.Id = broker.broker_id;
     filteredBroker.FirstName__c = broker.first_name;
     filteredBroker.LastName__c = broker.last_name;
     filteredBroker.Name = broker.name;
@@ -50,7 +49,7 @@ export let findAll = sort => {
     if (sort) {
         q = q + " ORDER BY " + sort
     }
-    return h.get("/query", {q}, filterFindResult);
+    return h.query(q);
 }
 
 export let findByProperty = propertyId => {
@@ -58,32 +57,28 @@ export let findByProperty = propertyId => {
             "WHERE Id IN " +
             "(SELECT Broker__c FROM PropertyBroker__c WHERE Property__c = '" + propertyId + "') " +
             "ORDER BY LastName__c";
-    return h.get("/query", {q}, filterFindResult);
+    return h.query(q);
 }
 
 export let findByName = name => {
     let q = "SELECT Id, FirstName__c, LastName__c, Name, Title__c, OfficePhone__c, MobilePhone__c, Email__c FROM Broker__c WHERE Name = '" + name + "'";
-    return h.get("/query", {q}, getFirstRecord);
+    return h.query(q);
 }
 
 export let findById = id => {
     let q = "SELECT Id, FirstName__c, LastName__c, Name, Title__c, OfficePhone__c, MobilePhone__c, Email__c FROM Broker__c WHERE Id = '" + id + "'";
-    return h.get("/query", {q}, getFirstRecord);
+    return h.query(q);
 }
 
 export let updateItem = broker => {
-    if (!broker.broker_id) {
-        return;
-    }
-    let filteredBroker = filterCreateOrUpdateInput(broker);
-    return h.patch("/sobjects/Broker__c/" + broker.broker_id, filteredBroker);
+    return h.update("Broker__c", broker);
 }
 
 export let createItem = broker => {
-    let filteredBroker = filterCreateOrUpdateInput(broker);
-    return h.post("/sobjects/Broker__c/", filteredBroker);
+    delete broker.Id;
+    return h.create("Broker__c", broker);
 }
 
 export let deleteItem = id => {
-    return h.del("/sobjects/Broker__c/" + id);
+    return h.del("Broker__c", id);
 }

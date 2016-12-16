@@ -14,18 +14,25 @@ export default React.createClass({
     },
 
     componentDidMount() {
-        propertyService.findAll(this.state.sortOrder).then(properties => this.setState({properties}));
+        propertyService.findAll(this.state.sortOrder).then(properties => {
+            let filteredProperties = propertyService.filterFoundProperties(properties);
+            this.setState({properties:filteredProperties})
+        });
     },
 
     sortHandler(sortOrder) {
         propertyService.findAll(sortOrder).then(properties => {
-            this.setState({sortOrder, properties})
+            let filteredProperties = propertyService.filterFoundProperties(properties);
+            this.setState({sortOrder, properties:filteredProperties});
         });
     },
 
     deleteHandler(data) {
         propertyService.deleteItem(data.property_id).then(() => {
-            propertyService.findAll(this.state.sort).then(properties => this.setState({properties}));
+            propertyService.findAll(this.state.sort).then(properties => {
+                let filteredProperties = propertyService.filterFoundProperties(properties);
+                this.setState({properties:filteredProperties});
+            });
         });
     },
 
@@ -42,8 +49,12 @@ export default React.createClass({
     },
 
     saveHandler(property) {
-        propertyService.createItem(property).then(() => {
-            propertyService.findAll(this.state.sort).then(properties => this.setState({addingProperty: false, properties}));
+        let filteredProperty = propertyService.filterProperty(property);
+        propertyService.createItem(filteredProperty).then(() => {
+            propertyService.findAll(this.state.sort).then(properties => {
+                let filteredProperties = propertyService.filterFoundProperties(properties);
+                this.setState({addingProperty: false, properties:filteredProperties});
+            });
         });
     },
 

@@ -14,7 +14,10 @@ export default React.createClass({
     },
 
     searchKeyChangeHandler(key) {
-        propertyService.findByName(key).then(list => this.setState({searchKey: key, list: list}));
+        propertyService.findByName(key).then(list => {
+            let filteredList = propertyService.filterFoundProperties(list);
+            this.setState({searchKey: key, list: filteredList});
+        });
     },
 
     render() {

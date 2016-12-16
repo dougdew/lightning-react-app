@@ -1,6 +1,6 @@
 import * as h from './h';
 
-let filterFindResult = (result) => {
+export let filterFoundActivityTypes = (result) => {
     let records = result.records;
     for (var i = 0; i < records.length; i++) {
         records[i].activity_type_id = records[i].Id;
@@ -11,5 +11,5 @@ let filterFindResult = (result) => {
 
 export let findAll = sort => {
     let q = "SELECT Id, Name FROM PropertyActivityType__c ";
-    return h.get("/query", {q}, filterFindResult);
+    return h.query(q);
 }

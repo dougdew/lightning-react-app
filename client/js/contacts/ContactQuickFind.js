@@ -14,7 +14,10 @@ export default React.createClass({
     },
 
     searchKeyChangeHandler(key) {
-        contactService.findByName(key).then(list => this.setState({searchKey: key, list: list}));
+        contactService.findByName(key).then(list => {
+            let filteredList = contactService.filterFoundContacts(list);
+            this.setState({searchKey: key, list: filteredList});
+        });
     },
 
     render() {

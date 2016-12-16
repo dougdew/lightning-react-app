@@ -11,7 +11,10 @@ export default React.createClass({
     },
 
     componentDidMount() {
-        activityTypeService.findAll().then(activityTypes => this.setState({activityTypes: activityTypes}));
+        activityTypeService.findAll().then(activityTypes => {
+            let filteredActivityTypes = activityTypeService.filterFoundActivityTypes(activityTypes);
+            this.setState({activityTypes:filteredActivityTypes});
+        });
     },
 
     render() {

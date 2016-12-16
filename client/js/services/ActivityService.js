@@ -1,6 +1,6 @@
 import * as h from './h';
 
-let filterFindResult = (result) => {
+export let filterFoundActivities = (result) => {
     let records = result.records;
     for (var i = 0; i < records.length; i++) {
         records[i].activity_id = records[i].Id;
@@ -16,8 +16,8 @@ let filterFindResult = (result) => {
     return records;
 }
 
-let getFirstRecord = (result) => {
-    let filteredResult = filterFindResult(result);
+export let filterFoundActivity = (result) => {
+    let filteredResult = filterFoundActivities(result);
     if (filteredResult.length == 1) {
         return filteredResult[0];
     }
@@ -26,8 +26,9 @@ let getFirstRecord = (result) => {
     }
 };
 
-let filterCreateOrUpdateInput = (activity) => {
+export let filterActivity = (activity) => {
     let filteredActivity = {};
+    filteredActivity.Id = activity.activity_id;
     filteredActivity.Property__c = activity.property_id;
     filteredActivity.Contact__c = activity.contact_id;
     filteredActivity.ActivityType__c = activity.activity_name;
@@ -40,43 +41,42 @@ let filterCreateOrUpdateInput = (activity) => {
 export let findAll = sort => {
     let q = "SELECT Id, Property__c, Property__r.Address__c, Contact__c, Contact__r.FirstName__c, Contact__r.LastName__c, ActivityType__r.Name, ActivityDate__c, Price__c, Comment__c FROM PropertyActivity__c " +
             "ORDER BY ActivityDate__c";
-    return h.get("/query", {q}, filterFindResult);
+    return h.query(q);
 }
 
 export let findByName = name => {
     let q = "SELECT Id, Property__c, Property__r.Address__c, Contact__c, Contact__r.FirstName__c, Contact__r.LastName__c, ActivityType__r.Name, ActivityDate__c, Price__c, Comment__c FROM PropertyActivity__c " +
             "WHERE Name = '" + name + "'";
-    return h.get("/query", {q}, getFirstRecord);
+    return h.query(q);
 }
 
 export let findByProperty = propertyId => {
     let q = "SELECT Id, Property__c, Property__r.Address__c, Contact__c, Contact__r.FirstName__c, Contact__r.LastName__c, ActivityType__r.Name, ActivityDate__c, Price__c, Comment__c FROM PropertyActivity__c " +
             "WHERE Property__c = '" + propertyId + "'";
-    return h.get("/query", {q}, filterFindResult);
+    return h.query(q);
 }
 
 export let findByContact = contactId => {
     let q = "SELECT Id, Property__c, Property__r.Address__c, Contact__c, Contact__r.FirstName__c, Contact__r.LastName__c, ActivityType__r.Name, ActivityDate__c, Price__c, Comment__c FROM PropertyActivity__c " +
             "WHERE Contact__c = '" + contactId + "'";
-    return h.get("/query", {q}, filterFindResult);
+    return h.query(q);
 }
 
 export let findById = id => {
     let q = "SELECT Id, Property__c, Property__r.Address__c, Contact__c, Contact__r.FirstName__c, Contact__r.LastName__c, ActivityType__r.Name, ActivityDate__c, Price__c, Comment__c FROM PropertyActivity__c " +
             "WHERE Id = '" + id + "'";
-    return h.get("/query", {q}, getFirstRecord);
+    return h.query(q);
 }
 
-export let updateItem = property => {
-    // Not implemented
-    return null;
+export let updateItem = activity => {
+    return h.update("PropertyActivity__c", activity);
 }
 
 export let createItem = activity => {
-    let filteredActivity = filterCreateOrUpdateInput(activity);
-    return h.post("/sobjects/PropertyActivity__c/", filteredActivity);
+    delete activity.Id;
+    return h.create("PropertyActivity__c", activity);
 }
 
 export let deleteItem = id => {
-    return h.del("/sobjects/PropertyActivity__c/" + id);
+    return h.del("PropertyActivity__c", id);
 }

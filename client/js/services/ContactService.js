@@ -1,6 +1,6 @@
 import * as h from './h';
 
-let filterFindResult = (result) => {
+export let filterFoundContacts = (result) => {
     let records = result.records;
     for (var i = 0; i < records.length; i++) {
         records[i].contact_id = records[i].Id;
@@ -24,8 +24,8 @@ let filterFindResult = (result) => {
     return records;
 }
 
-let getFirstRecord = (result) => {
-    let filteredResult = filterFindResult(result);
+export let filterFoundContact = (result) => {
+    let filteredResult = filterFoundContacts(result);
     if (filteredResult.length == 1) {
         return filteredResult[0];
     }
@@ -34,8 +34,9 @@ let getFirstRecord = (result) => {
     }
 };
 
-let filterCreateOrUpdateInput = (contact) => {
+export let filterCreateOrUpdateInput = (contact) => {
     let filteredContact = {};
+    filteredContact.Id = contact.contact_id;
     filteredContact.FirstName = contact.first_name;
     filteredContact.LastName = contact.last_name;
     filteredContact.Name = contact.name;
@@ -63,32 +64,28 @@ export let findAll = sort => {
         sort = "FirstName__c";
     }
     let q = "SELECT Id, FirstName, LastName, Name, HomePhone, MobilePhone, Email FROM Contact ORDER BY " + sort;
-    return h.get("/query", {q}, filterFindResult);
+    return h.query(q);
 }
 
 export let findByName = name => {
     let q = "SELECT Id, FirstName, LastName, Name, Address__c, City__c, State__c, Zip__c, Occupation__c, HomePhone, MobilePhone, Email, LeadSource, Category__c, MemberSince__c, Notes__c, Pic__c FROM Contact WHERE Name = '" + name + "'";
-    return h.get("/query", {q}, getFirstRecord);
+    return h.query(q);
 }
 
 export let findById = id => {
     let q = "SELECT Id, FirstName, LastName, Name, Address__c, City__c, State__c, Zip__c, Occupation__c, HomePhone, MobilePhone, Email, LeadSource, Category__c, MemberSince__c, Notes__c, Pic__c FROM Contact WHERE Id = '" + id + "'";
-    return h.get("/query", {q}, getFirstRecord);
+    return h.query(q);
 }
 
 export let updateItem = contact => {
-    if (!contact.contact_id) {
-        return;
-    }
-    let filteredContact = filterCreateOrUpdateInput(contact);
-    return h.patch("/sobjects/Contact/" + contact.contact_id, filteredContact);
+    return h.update("Contact", contact);
 }
 
 export let createItem = contact => {
-    let filteredContact = filterCreateOrUpdateInput(contact);
-    return h.post("/sobjects/Contact/", filteredContact);
+    delete contact.Id;
+    return h.create("Contact", contact);
 }
 
 export let deleteItem = id => {
-    return h.del("/sobjects/Contact/" + id);
+    return h.del("Contact", id);
 }

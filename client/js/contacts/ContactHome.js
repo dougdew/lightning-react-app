@@ -14,12 +14,16 @@ export default React.createClass({
     },
 
     componentDidMount() {
-        contactService.findAll().then(contacts => this.setState({contacts}));
+        contactService.findAll().then(contacts => {
+            let filteredContacts = contactService.filterFoundContacts(contacts);
+            this.setState({contacts:filteredContacts});
+        });
     },
 
     sortHandler(sortOrder) {
         contactService.findAll(sortOrder).then(contacts => {
-            this.setState({sortOrder, contacts})
+            let filteredContacts = contactService.filterFoundContacts(contacts);
+            this.setState({sortOrder, contacts:filteredContacts});
         });
     },
 
@@ -29,7 +33,10 @@ export default React.createClass({
 
     deleteHandler(data) {
         contactService.deleteItem(data.contact_id).then(() => {
-            contactService.findAll(this.state.sort).then(contacts => this.setState({contacts}));
+            contactService.findAll(this.state.sort).then(contacts => {
+                let filteredContacts = contactService.filterFoundContacts(contacts);
+                this.setState({contacts:filteredContacts});
+            });
         });
     },
 
@@ -37,9 +44,13 @@ export default React.createClass({
         window.location.hash = "#contact/" + data.contact_id + "/edit";
     },
 
-    saveHandler(Contact) {
-        contactService.createItem(Contact).then(() => {
-            contactService.findAll().then(contacts => this.setState({addingContact: false, contacts}));
+    saveHandler(contact) {
+        let filteredContact = contactService.filterContact(contact);
+        contactService.createItem(filteredContact).then(() => {
+            contactService.findAll().then(contacts => {
+                let filteredContacts = contactService.filterFoundContacts(contacts);
+                this.setState({addingContact: false, contacts:filteredContacts});
+            });
         });
     },
 

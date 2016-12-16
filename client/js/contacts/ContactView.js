@@ -20,7 +20,10 @@ export default React.createClass({
     },
 
     loadActivities(contactId) {
-        activityService.findByContact(contactId).then(activities => this.setState({activities}));
+        activityService.findByContact(contactId).then(activities => {
+            let filteredActivities = activityService.filterFoundActivities(activities);
+            this.setState({activities:filteredActivities});
+        });
     },
 
     newActivityHandler() {
@@ -36,7 +39,8 @@ export default React.createClass({
     },
 
     saveActivityHandler(activity) {
-        activityService.createItem(activity).then(() => {
+        let filteredActivity = activityService.filterActivity(activity);
+        activityService.createItem(filteredActivity).then(() => {
             this.loadActivities(this.props.contact.contact_id);
             this.setState({addingActivity: false});
         });

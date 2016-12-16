@@ -13,11 +13,15 @@ export default React.createClass({
 
     componentDidMount() {
         let brokerId = this.props.params.brokerId;
-        brokerService.findById(brokerId).then(broker => this.setState({broker}));
+        brokerService.findById(brokerId).then(broker => {
+            let filteredBroker = brokerService.filterFoundBroker(broker);
+            this.setState({broker:filteredBroker});
+        });
     },
 
     saveHandler(broker) {
-        brokerService.updateItem(broker);
+        let filteredBroker = brokerService.filterBroker(broker);
+        brokerService.updateItem(filteredBroker);
     },
 
     editHandler() {

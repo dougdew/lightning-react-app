@@ -13,12 +13,16 @@ export default React.createClass({
     },
 
     componentDidMount() {
-        brokerService.findAll().then(brokers => this.setState({brokers}));
+        brokerService.findAll().then(brokers => {
+            let filteredBrokers = brokerService.filterFoundBrokers(brokers);
+            this.setState({brokers:filteredBrokers});
+        });
     },
 
     sortHandler(sortOrder) {
         brokerService.findAll(sortOrder).then(brokers => {
-            this.setState({sortOrder, brokers})
+            let filteredBrokers = brokerService.filterFoundBrokers(brokers);
+            this.setState({sortOrder, brokers:filteredBrokers});
         });
     },
 
@@ -28,7 +32,10 @@ export default React.createClass({
 
     deleteHandler(data) {
         brokerService.deleteItem(data.broker_id).then(() => {
-            brokerService.findAll(this.state.sort).then(brokers => this.setState({brokers}));
+            brokerService.findAll(this.state.sort).then(brokers => {
+                let filteredBrokers = brokerService.filterFoundBrokers(brokers);
+                this.setState({brokers:filteredBrokers});
+            });
         });
     },
 
@@ -36,9 +43,13 @@ export default React.createClass({
         window.location.hash = "#broker/" + data.broker_id + "/edit";
     },
 
-    saveHandler(Broker) {
-        brokerService.createItem(Broker).then(() => {
-            brokerService.findAll().then(brokers => this.setState({addingBroker: false, brokers}));
+    saveHandler(broker) {
+        let filteredBroker = brokerService.filterBroker(broker);
+        brokerService.createItem(filteredBroker).then(() => {
+            brokerService.findAll().then(brokers => {
+                let filteredBrokers = brokerService.filterFoundBrokers(brokers);
+                this.setState({addingBroker: false, brokers:filteredBrokers});
+            });
         });
     },
 
