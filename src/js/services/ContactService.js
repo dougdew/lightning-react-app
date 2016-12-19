@@ -61,7 +61,7 @@ export let findAll = sort => {
         sort = sort + "__c"; // FIX THIS
     }
     else {
-        sort = "FirstName__c";
+        sort = "FirstName";
     }
     let q = "SELECT Id, FirstName, LastName, Name, HomePhone, MobilePhone, Email FROM Contact ORDER BY " + sort;
     return h.query(q);
