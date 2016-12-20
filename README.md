@@ -21,30 +21,25 @@ Follow the instructions below if you prefer to install the application on your l
 1. Type the following command to build the client application:
 
     ```
-    npm run webpack
+    npm run build
     ```
     
     The project is written using ECMAScript 6 including ECMAScript 6 modules.
 
-1. Type the following command to start the server:
+1. Edit the package.json file to reference your force.com server, and to use your force.com username and password
+
+1. Type the following command to deploy the client application and all supporting metadata to your force.com server:
     
     ```
-    npm run server
-    ```
-    
-1. Open a browser and access [http://localhost:8080](http://localhost:8080)    
+    npm run deploy
+    ```    
 
 ## Work in Progress
 
 This project is work in progress. For example, here are some items that still need work:
 
-- Provide custom LC to wrap the ReactJS content
-- Provide metadata to create custom objects
 - Provide data to populate objects
 - Make components more robust and general purpose
-- Create more components
-- Fix React keys throughout the project
-- Improved navigation system
-- etc.
+- Fix React keys throughout the project to eliminate warnings
 
 
