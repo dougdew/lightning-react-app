@@ -106,8 +106,8 @@ export let HomeHeader = React.createClass({
     },
 
     render() {
-        let viewItems = this.props.viewOptions.map(item => <DropdownItem value={item.value} label={item.label} icon={item.icon}/>);
-        let sortItems = this.props.sortOptions.map(item => <DropdownItem value={item.value} label={item.label}/>);
+        let viewItems = this.props.viewOptions.map((item, index) => <DropdownItem value={item.value} label={item.label} icon={item.icon} key={index}/>);
+        let sortItems = this.props.sortOptions.map((item, index) => <DropdownItem value={item.value} label={item.label} key={index}/>);
         return (
             <div className="slds-page-header">
                 <div className="slds-grid">

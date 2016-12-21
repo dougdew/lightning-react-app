@@ -77,12 +77,12 @@ let Row = React.createClass({
             if (column.props && column.props.field) {
                 columns.push(<Column label={column.props.header} data={this.props.data} field={column.props.field}
                                      textAlign={column.props.textAlign} format={column.props.format}
-                                     onLink={column.props.onLink}/>);
+                                     onLink={column.props.onLink} key={i}/>);
             }
         }
 
         columns.push(
-            <td style={{width:"50px"}}>
+            <td style={{width:"50px"}} key={this.props.columns.length}>
                 <ActionButton onChange={this.actionHandler}>
                     <DropdownItem label="Edit"/>
                     <DropdownItem label="Delete"/>
@@ -114,12 +114,12 @@ export default React.createClass({
             if (column.props && column.props.field) {
                 headers.push(<ColumnHeader field={column.props.field} label={column.props.header}
                                            sortable={column.props.sortable} textAlign={column.props.textAlign}
-                                           onSort={this.sortHandler}/>);
+                                           onSort={this.sortHandler} key={i}/>);
             }
         }
         let rows;
         if (this.props.data) {
-            rows = this.props.data.map(item => <Row data={item} columns={this.props.children} onAction={this.props.onAction}/>);
+            rows = this.props.data.map((item, index) => <Row data={item} columns={this.props.children} onAction={this.props.onAction} key={index}/>);
         }
         return (
             <table className="slds-table slds-table--bordered slds-max-medium-table--stacked-horizontal slds-no-row-hover">

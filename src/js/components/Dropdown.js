@@ -32,7 +32,7 @@ let Dropdown = React.createClass({
     },
 
     render() {
-        let items = this.props.items.map((item) => React.cloneElement(item, {onSelect: this.props.onChange}));
+        let items = this.props.items.map((item, index) => React.cloneElement(item, {onSelect: this.props.onChange, key: index}));
         let className = "slds-dropdown slds-dropdown--menu";
         if (this.props.position) className = className + " slds-dropdown--" + this.props.position;
         if (this.props.size) className = className + " slds-dropdown--" + this.props.size;
